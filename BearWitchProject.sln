@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{8578A16C-18B5-EF96-89A9-7096BB7BA38A}") = "BearWitchProject", "Assembly-CSharp.csproj", "{A20B02DD-E4AA-B704-2D39-4B1789F47BED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A20B02DD-E4AA-B704-2D39-4B1789F47BED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A20B02DD-E4AA-B704-2D39-4B1789F47BED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A20B02DD-E4AA-B704-2D39-4B1789F47BED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A20B02DD-E4AA-B704-2D39-4B1789F47BED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
