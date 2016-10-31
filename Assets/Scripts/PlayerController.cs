@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour 
-{
+public class PlayerController : MonoBehaviour {
 	[SerializeField]
 	private float _speed = 5f;
 	[SerializeField]
@@ -14,8 +13,8 @@ public class PlayerController : MonoBehaviour
 	// Use this for initialization
 	void Start() 
 	{
-		_motor = GetComponent<PlayerMotor>();
-		_animator = GetComponent<Animator>();
+		_motor = GetComponentInChildren<PlayerMotor>();
+		_animator = GetComponentInChildren<Animator>();
 	}
 	
 	// Update is called once per frame
