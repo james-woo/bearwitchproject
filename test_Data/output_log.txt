@@ -14,13 +14,61 @@ Platform assembly: D:\James\Development\bearwitchproject\test_Data\Managed\Unity
 Loading D:\James\Development\bearwitchproject\test_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: D:\James\Development\bearwitchproject\test_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading D:\James\Development\bearwitchproject\test_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.151 seconds
+- Completed reload, in  0.146 seconds
 Platform assembly: D:\James\Development\bearwitchproject\test_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\James\Development\bearwitchproject\test_Data\Managed\System.dll (this message is harmless)
 desktop: 1600x900 60Hz; virtual: 1600x900 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 0.651703 ms
+UnloadTime: 0.651325 ms
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 3dbc -> priority: 1 
+  Thread -> id: 27f4 -> priority: 1 
+Player 1 now has 90 health
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player 1 now has 80 health
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player 1 now has 70 health
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player 1 now has 60 health
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player 1 now has 50 health
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player 1 now has 40 health
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player 1 now has 30 health
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player 1 now has 20 health
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player 1 now has 10 health
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player 1 now has 0 health
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player 1 is dead
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Player 1 respawned
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+

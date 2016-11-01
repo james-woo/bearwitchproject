@@ -41,16 +41,11 @@ public class PlayerMotor : MonoBehaviour {
             _grounded = true;
         }
 
-        if (_rb.velocity.y == 0)
-        {
-            _animator.SetBool("Jumping", false);
-        }
-
         if (_jumpForce != Vector3.zero && _grounded == true)
         {
             _rb.AddForce(_jumpForce * Time.fixedDeltaTime, ForceMode.Impulse);
             _grounded = false;
-            _animator.SetBool("Jumping", true);
+            _animator.SetTrigger("Jumping");
         }
 	}
 
