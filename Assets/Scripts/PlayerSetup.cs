@@ -26,7 +26,7 @@ public class PlayerSetup : NetworkBehaviour {
         {
             DisableComponents();   
             AssignRemoteLayer();
-            // Disable player graphics for local player
+            // Disable player graphics for remote player
             SetLayerRecursively(_remoteGraphics, LayerMask.NameToLayer(_dontDrawLayerName));
         }
         else
