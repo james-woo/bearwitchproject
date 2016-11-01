@@ -4,7 +4,12 @@ using UnityEngine.Networking;
 [RequireComponent(typeof(Animator))]
 public class PlayerAttack : NetworkBehaviour {
 
-    public PlayerWeapon weapon;
+    [SerializeField]
+    private PlayerWeapon _weapon;
+    [SerializeField]
+    private GameObject _weaponGFX;
+    [SerializeField]
+    private string _weaponLayerName = "Weapon";
 
 	[SerializeField]
     private Camera _camera;
@@ -24,6 +29,8 @@ public class PlayerAttack : NetworkBehaviour {
             Debug.LogError("PlayerAttack: No camera referenced");
             this.enabled = false;
         }
+
+        _weaponGFX.layer = LayerMask.NameToLayer(_weaponLayerName);
     }
 
     void Update()
@@ -44,12 +51,12 @@ public class PlayerAttack : NetworkBehaviour {
         if (Physics.Raycast(_camera.transform.position, 
                             _camera.transform.forward, 
                             out hit,
-                            weapon.range,
+                            _weapon.range,
                             mask))
         {
             if (hit.collider.tag == PLAYER_TAG)
             {
-                CmdPlayerAttacked(hit.collider.name, weapon.damage);
+                CmdPlayerAttacked(hit.collider.name, _weapon.damage);
             }
         }
     }
