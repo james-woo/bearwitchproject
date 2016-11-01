@@ -9,5 +9,6 @@ public class PlayerWeapon {
     public float range = 2.0f;
     public float fireRate = 1f;
 
-    public GameObject graphics;
+    public GameObject localGraphics;
+    public GameObject globalGraphics;
 }

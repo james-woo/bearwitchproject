@@ -8,23 +8,21 @@ Direct3D:
 Begin MonoManager ReloadAssembly
 Platform assembly: D:\James\Development\bearwitchproject\test_Data\Managed\UnityEngine.dll (this message is harmless)
 Loading D:\James\Development\bearwitchproject\test_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\James\Development\bearwitchproject\test_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading D:\James\Development\bearwitchproject\test_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
 Platform assembly: D:\James\Development\bearwitchproject\test_Data\Managed\Assembly-CSharp.dll (this message is harmless)
 Loading D:\James\Development\bearwitchproject\test_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
 Platform assembly: D:\James\Development\bearwitchproject\test_Data\Managed\UnityEngine.UI.dll (this message is harmless)
 Loading D:\James\Development\bearwitchproject\test_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: D:\James\Development\bearwitchproject\test_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading D:\James\Development\bearwitchproject\test_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.054 seconds
+- Completed reload, in  0.068 seconds
 Platform assembly: D:\James\Development\bearwitchproject\test_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\James\Development\bearwitchproject\test_Data\Managed\System.dll (this message is harmless)
 desktop: 1600x900 60Hz; virtual: 1600x900 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 0.655479 ms
+UnloadTime: 0.649437 ms
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 3f64 -> priority: 1 
-Attacking!
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
-
+  Thread -> id: 660 -> priority: 1 

@@ -31,6 +31,7 @@ public class PlayerAttack : NetworkBehaviour {
     void Update()
     {
         _currentWeapon = _weaponManager.GetCurrentWeapon();
+        if (_currentWeapon == null) return;
 
         if (_currentWeapon.fireRate <= 0)
         {
@@ -52,11 +53,31 @@ public class PlayerAttack : NetworkBehaviour {
         }
     }
 
+    // Is called on the server when player attacks
+    [Command]
+    void CmdOnAttack()
+    {
+        RpcDoAnimate();
+    }
+
+    // Is called on all clients when we need attack animations
+    [ClientRpc]
+    void RpcDoAnimate()
+    {
+        _weaponManager.GetCurrentGlobalGraphics().effect.Play();
+
+        _animator.SetTrigger("Attacking");
+    }
+
     // Only called on client
     [Client]
     void Attack()
     {
-        _animator.SetTrigger("Attacking");
+        if (!isLocalPlayer) return;
+
+        // We are attacking, call the OnShoot method on the server
+        CmdOnAttack();
+
         RaycastHit hit;
 
         if (Physics.Raycast(_camera.transform.position, 
