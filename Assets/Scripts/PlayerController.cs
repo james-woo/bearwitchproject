@@ -4,6 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(ConfigurableJoint))]
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerController : MonoBehaviour {
+    
 	[SerializeField]
 	private float _speed = 5f;
 	[SerializeField]

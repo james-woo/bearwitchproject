@@ -41,8 +41,6 @@ public class PlayerAttack : NetworkBehaviour {
 
         RaycastHit hit;
 
-
-
         if (Physics.Raycast(_camera.transform.position, 
                             _camera.transform.forward, 
                             out hit,
@@ -58,8 +56,8 @@ public class PlayerAttack : NetworkBehaviour {
 
     // Only called on server
     [Command]
-    void CmdPlayerAttacked(string id)
+    void CmdPlayerAttacked(string playerid)
     {
-        Debug.Log(id + " has been attacked");
+        Debug.Log(playerid + " has been attacked");
     }
 }

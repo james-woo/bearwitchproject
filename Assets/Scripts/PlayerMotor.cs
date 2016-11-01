@@ -16,7 +16,7 @@ public class PlayerMotor : MonoBehaviour {
     private bool _grounded = true;
 	private Rigidbody _rb;
     private Animator _animator;
-	// Use this for initialization
+
 	void Start () 
 	{
 		_rb = GetComponent<Rigidbody>();
@@ -40,10 +40,12 @@ public class PlayerMotor : MonoBehaviour {
         {
             _grounded = true;
         }
+
         if (_rb.velocity.y == 0)
         {
             _animator.SetBool("Jumping", false);
         }
+
         if (_jumpForce != Vector3.zero && _grounded == true)
         {
             _rb.AddForce(_jumpForce * Time.fixedDeltaTime, ForceMode.Impulse);
