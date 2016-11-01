@@ -4,6 +4,23 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
+    public static GameManager instance;
+    public MatchSettings matchSettings;
+     
+    void Awake()
+    {
+        if (instance != null)
+        {
+            Debug.LogError("GameManager: More than one GameManager in scene");
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
+    #region Player tracking
+
     private const string PLAYER_ID_PREFIX = "Player ";
 
     // Key: ID Value: Player
@@ -12,7 +29,7 @@ public class GameManager : MonoBehaviour {
     public static void RegisterPlayer(string netid, Player player)
     {
         string playerid = PLAYER_ID_PREFIX + netid;
-        _players.Add(netid, player);
+        _players.Add(playerid, player);
         player.transform.name = playerid;
     }
 
@@ -40,4 +57,6 @@ public class GameManager : MonoBehaviour {
         GUILayout.EndVertical();
         GUILayout.EndArea();
     }*/
+
+    #endregion
 }

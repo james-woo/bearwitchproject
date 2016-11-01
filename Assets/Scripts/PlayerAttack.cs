@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 
+[RequireComponent(typeof(Animator))]
 public class PlayerAttack : NetworkBehaviour {
 
     public PlayerWeapon weapon;
@@ -29,6 +30,7 @@ public class PlayerAttack : NetworkBehaviour {
     {
         if (Input.GetButtonDown("Fire1"))
         {
+            _animator.SetTrigger("Attacking");
             Attack();
         }
     }
@@ -37,8 +39,6 @@ public class PlayerAttack : NetworkBehaviour {
     [Client]
     void Attack()
     {
-        _animator.SetTrigger("Attacking");
-
         RaycastHit hit;
 
         if (Physics.Raycast(_camera.transform.position, 
@@ -49,15 +49,17 @@ public class PlayerAttack : NetworkBehaviour {
         {
             if (hit.collider.tag == PLAYER_TAG)
             {
-                CmdPlayerAttacked(hit.collider.name);
+                CmdPlayerAttacked(hit.collider.name, weapon.damage);
             }
         }
     }
 
     // Only called on server
     [Command]
-    void CmdPlayerAttacked(string playerid)
+    void CmdPlayerAttacked(string playerid, float damage)
     {
         Debug.Log(playerid + " has been attacked");
+        Player player = GameManager.GetPlayer(playerid);
+        player.RpcTakeDamage(damage);
     }
 }

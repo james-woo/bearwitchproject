@@ -3,6 +3,7 @@ using System.Collections;
 
 [RequireComponent(typeof(ConfigurableJoint))]
 [RequireComponent(typeof(PlayerMotor))]
+[RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour {
     
 	[SerializeField]
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float _jointMaxForce = 40;
 
+    // Component caching
 	private PlayerMotor _motor;
 	private Animator _animator;
     private ConfigurableJoint _joint;
@@ -35,13 +37,13 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update() 
 	{
-		var xMov = Input.GetAxisRaw("Horizontal");
-		var zMov = Input.GetAxisRaw("Vertical");
+		var xMov = Input.GetAxis("Horizontal");
+		var zMov = Input.GetAxis("Vertical");
 
 		// Movement
 		var movHorizontal = transform.right * xMov;
 		var movVertical = transform.forward * zMov;
-		var velocity = (movHorizontal + movVertical).normalized * _speed;
+		var velocity = (movHorizontal + movVertical) * _speed;
 		_motor.Move (velocity);
 		_animator.SetFloat("VSpeed", zMov);
 		_animator.SetFloat("HSpeed", xMov);
