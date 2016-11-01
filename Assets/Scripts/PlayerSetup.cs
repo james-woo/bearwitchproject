@@ -13,6 +13,8 @@ public class PlayerSetup : NetworkBehaviour {
     [SerializeField]
     private GameObject _playerGraphics;
     [SerializeField]
+    private GameObject _remoteGraphics;
+    [SerializeField]
     private GameObject _playerUIPrefab;
     private GameObject _playerUIInstance;
 
@@ -24,6 +26,8 @@ public class PlayerSetup : NetworkBehaviour {
         {
             DisableComponents();   
             AssignRemoteLayer();
+            // Disable player graphics for local player
+            SetLayerRecursively(_remoteGraphics, LayerMask.NameToLayer(_dontDrawLayerName));
         }
         else
         {
@@ -35,7 +39,7 @@ public class PlayerSetup : NetworkBehaviour {
 
             // Disable player graphics for local player
             SetLayerRecursively(_playerGraphics, LayerMask.NameToLayer(_dontDrawLayerName));
-
+            
             // Create player ui
             _playerUIInstance = Instantiate(_playerUIPrefab);
             _playerUIInstance.name = _playerUIPrefab.name;
