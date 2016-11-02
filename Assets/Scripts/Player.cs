@@ -4,13 +4,29 @@ using System.Collections;
 
 public class Player : NetworkBehaviour {
 
+    // Health
     [SerializeField]
     private float _maxHealth = 100f;
+    [SerializeField]
+    private float _healthRegen = 1f;
+    // Synchronize players current health to all clients
+    [SyncVar]
+    private float _currentHealth;
+
+    // Mana
+    [SerializeField]
+    private float _maxMana = 100f;
+    [SerializeField]
+    private float _manaRegen = 1f;
+    // Synchronize players current mana to all clients
+    [SyncVar]
+    private float _currentMana;
+
     [SerializeField]
     private Behaviour[] _disableOnDeath;
     [SerializeField]
     private bool[] _wasEnabled;
-
+    
     [SyncVar]
     private bool _isDead = false;
     public bool isDead
@@ -18,10 +34,6 @@ public class Player : NetworkBehaviour {
         get { return _isDead; }
         protected set { _isDead = value; }
     }
-
-    // Synchronize players current health to all clients
-    [SyncVar]
-    private float _currentHealth;
 
     private Animator _animator;
 
@@ -37,10 +49,23 @@ public class Player : NetworkBehaviour {
         SetDefaults();
     }
 
+    void Start()
+    {
+        InvokeRepeating("RegenerateHealth", 0.0f, 1.0f);
+        InvokeRepeating("RegenerateMana", 0.0f, 1.0f);
+    }
+
+    void Update()
+    {
+        
+    }
+
     public void SetDefaults()
     {
         _isDead = false;
         _currentHealth = _maxHealth;
+        _currentMana = _maxMana;
+
         for (int i = 0; i < _disableOnDeath.Length; i++)
         {
             _disableOnDeath[i].enabled = _wasEnabled[i];
@@ -51,6 +76,45 @@ public class Player : NetworkBehaviour {
         {
             col.enabled = true;
         }
+    }
+
+    void RegenerateHealth()
+    {
+        if (_currentHealth < _maxHealth)
+            _currentHealth += _healthRegen;
+    }
+
+    public float GetCurrentHealth()
+    {
+        return _currentHealth;
+    }
+
+    public float GetMaxHealth()
+    {
+        return _maxHealth;
+    }
+
+    void RegenerateMana()
+    {
+        if (_currentMana < _maxMana)
+            _currentMana += _manaRegen;
+    }
+
+    public float GetCurrentMana()
+    {
+        return _currentMana;
+    }
+
+    public float GetMaxMana()
+    {
+        return _maxMana;
+    }
+
+    [ClientRpc]
+    public void RpcSpendMana(float amount)
+    {
+        _currentMana -= amount;
+        Debug.Log(transform.name + " now has " + _currentMana + " mana");
     }
 
     // For all clients connected

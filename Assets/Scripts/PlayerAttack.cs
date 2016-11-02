@@ -3,6 +3,7 @@ using UnityEngine.Networking;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(WeaponManager))]
+[RequireComponent(typeof(Player))]
 public class PlayerAttack : NetworkBehaviour {
 
    	[SerializeField]
@@ -15,11 +16,13 @@ public class PlayerAttack : NetworkBehaviour {
     private Animator _animator;
     private WeaponManager _weaponManager;
     private PlayerWeapon _currentWeapon;
+    private Player _player;
 
     void Start()
     {
         _animator = GetComponent<Animator>();
         _weaponManager = GetComponent<WeaponManager>();
+        _player = GetComponent<Player>();
 
         if (_camera == null)
         {
@@ -58,6 +61,9 @@ public class PlayerAttack : NetworkBehaviour {
     void CmdOnAttack()
     {
         RpcDoAttackAnimate();
+        
+        // Reduce mana
+        _player.RpcSpendMana(1f);
     }
 
     // Is called on the server when we hit something, takes in hit point and normal of surface

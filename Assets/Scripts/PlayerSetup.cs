@@ -2,6 +2,7 @@
 using UnityEngine.Networking;
 
 [RequireComponent(typeof(Player))]
+[RequireComponent(typeof(PlayerController))]
 public class PlayerSetup : NetworkBehaviour {
     
     [SerializeField]
@@ -43,6 +44,15 @@ public class PlayerSetup : NetworkBehaviour {
             // Create player ui
             _playerUIInstance = Instantiate(_playerUIPrefab);
             _playerUIInstance.name = _playerUIPrefab.name;
+
+            // Configure player ui
+            PlayerUI ui = _playerUIInstance.GetComponent<PlayerUI>();
+            if (ui == null)
+            {
+                Debug.LogError("No PlayerUI component on PlayerUI prefab");
+            }
+
+            ui.SetPlayer(GetComponent<Player>());
         }
 
         GetComponent<Player>().Setup();
