@@ -57,16 +57,32 @@ public class PlayerAttack : NetworkBehaviour {
     [Command]
     void CmdOnAttack()
     {
-        RpcDoAnimate();
+        RpcDoAttackAnimate();
+    }
+
+    // Is called on the server when we hit something, takes in hit point and normal of surface
+    [Command]
+    void CmdOnHit(Vector3 pos, Vector3 normal)
+    {
+        RpcDoHitAnimate(pos, normal);
     }
 
     // Is called on all clients when we need attack animations
     [ClientRpc]
-    void RpcDoAnimate()
+    void RpcDoAttackAnimate()
     {
         _weaponManager.GetCurrentGlobalGraphics().effect.Play();
 
         _animator.SetTrigger("Attacking");
+    }
+
+    // Is called on all clients when we need hit animations
+    [ClientRpc]
+    void RpcDoHitAnimate(Vector3 pos, Vector3 normal)
+    {
+        // Can use object pooling to instantiate lots of hit effects to increase performance
+        GameObject hitEffect = (GameObject)Instantiate(_weaponManager.GetCurrentGlobalGraphics().hitEffectPrefab, pos, Quaternion.LookRotation(normal));
+        Destroy(hitEffect, 1f);
     }
 
     // Only called on client
@@ -89,7 +105,9 @@ public class PlayerAttack : NetworkBehaviour {
             if (hit.collider.tag == PLAYER_TAG)
             {
                 CmdPlayerAttacked(hit.collider.name, _currentWeapon.damage);
-            }
+                // Hit something, call the OnHit method on server
+                CmdOnHit(hit.point, hit.normal);
+            }           
         }
     }
 
