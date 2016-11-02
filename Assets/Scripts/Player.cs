@@ -23,8 +23,11 @@ public class Player : NetworkBehaviour {
     [SyncVar]
     private float _currentHealth;
 
+    private Animator _animator;
+
 	public void Setup()
     {
+        _animator = GetComponent<Animator>();
         _wasEnabled = new bool[_disableOnDeath.Length];
         for (int i = 0; i < _wasEnabled.Length; i++)
         {
@@ -81,6 +84,7 @@ public class Player : NetworkBehaviour {
         }
 
         Debug.Log(transform.name + " is dead");
+        _animator.SetTrigger("Dead");
 
         StartCoroutine(Respawn());
     }
@@ -94,5 +98,6 @@ public class Player : NetworkBehaviour {
         transform.rotation = spawnPoint.rotation;
 
         Debug.Log(transform.name + " respawned");
+        _animator.SetTrigger("Respawn");
     }
 }
