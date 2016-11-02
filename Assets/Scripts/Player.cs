@@ -2,6 +2,7 @@
 using UnityEngine.Networking;
 using System.Collections;
 
+[RequireComponent(typeof(PlayerSetup))]
 public class Player : NetworkBehaviour {
 
     // Health
@@ -24,6 +25,8 @@ public class Player : NetworkBehaviour {
 
     [SerializeField]
     private Behaviour[] _disableOnDeath;
+    [SerializeField]
+    private GameObject[] _disableGameObjectsOnDeath;
     [SerializeField]
     private bool[] _wasEnabled;
     
@@ -66,15 +69,29 @@ public class Player : NetworkBehaviour {
         _currentHealth = _maxHealth;
         _currentMana = _maxMana;
 
+        // Enable components
         for (int i = 0; i < _disableOnDeath.Length; i++)
         {
             _disableOnDeath[i].enabled = _wasEnabled[i];
         }
 
+        // Enable gameobjects
+        for (int i = 0; i < _disableGameObjectsOnDeath.Length; i++)
+        {
+            _disableGameObjectsOnDeath[i].SetActive(true);
+        }
+
+        // Enable collider
         Collider col = GetComponent<Collider>();
         if (col != null)
         {
             col.enabled = true;
+        }
+
+        if (isLocalPlayer)
+        {
+            GameManager.instance.SetSceneCameraActive(false);
+            GetComponent<PlayerSetup>().playerUIInstance.SetActive(true);
         }
     }
 
@@ -141,10 +158,22 @@ public class Player : NetworkBehaviour {
             _disableOnDeath[i].enabled = false;
         }
 
+        for (int i = 0; i < _disableGameObjectsOnDeath.Length; i++)
+        {
+            _disableGameObjectsOnDeath[i].SetActive(false);
+        }
+
         Collider col = GetComponent<Collider>();
         if (col != null)
         {
             col.enabled = false;
+        }
+
+        // Switch cameras
+        if (isLocalPlayer)
+        {
+            GameManager.instance.SetSceneCameraActive(true);
+            GetComponent<PlayerSetup>().playerUIInstance.SetActive(false);
         }
 
         Debug.Log(transform.name + " is dead");
@@ -156,10 +185,12 @@ public class Player : NetworkBehaviour {
     IEnumerator Respawn()
     {
         yield return new WaitForSeconds(GameManager.instance.matchSettings.respawnTime);
-        SetDefaults();
+        
         Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
+
+        SetDefaults();
 
         Debug.Log(transform.name + " respawned");
         _animator.SetTrigger("Respawn");
