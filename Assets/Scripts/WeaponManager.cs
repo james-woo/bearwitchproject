@@ -10,14 +10,15 @@ public class WeaponManager : NetworkBehaviour {
     private string _weaponLayerName = "Weapon";
     [SerializeField]
     private PlayerWeapon _primaryWeapon;
+
+    // The player has a local and a global weapon, they look different but are the same weapon
     [SerializeField]
-    private Transform _localWeaponHolder;
+    private Transform _localWeaponHolder;           // What the local user sees
     [SerializeField]
-    private Transform _globalWeaponHolder;
+    private Transform _globalWeaponHolder;          // What the local user sees for other users
 
     private PlayerWeapon _currentWeapon;
-    private WeaponGraphics _currentLocalGraphics;
-    private WeaponGraphics _currentGlobalGraphics;
+    private WeaponGraphics _currentGraphics;
 
     void Start () {
         EquipWeapon(_primaryWeapon);
@@ -26,16 +27,21 @@ public class WeaponManager : NetworkBehaviour {
     void EquipWeapon(PlayerWeapon weapon)
     {
         _currentWeapon = weapon;
-        GameObject weaponGlobalInst = (GameObject)Instantiate(weapon.globalGraphics, _globalWeaponHolder.position, weapon.globalGraphics.transform.rotation);
+        GameObject weaponGlobalInst = (GameObject)Instantiate(weapon.graphics, _globalWeaponHolder.position, weapon.graphics.transform.rotation);
         weaponGlobalInst.transform.SetParent(_globalWeaponHolder);
-        _currentGlobalGraphics = weaponGlobalInst.GetComponent<WeaponGraphics>();
+        _currentGraphics = weaponGlobalInst.GetComponent<WeaponGraphics>();
 
         if (isLocalPlayer)
         {
-            GameObject weaponInst = (GameObject)Instantiate(weapon.localGraphics, _localWeaponHolder.position, weapon.localGraphics.transform.rotation);
+            GameObject weaponInst = (GameObject)Instantiate(weapon.graphics, _localWeaponHolder.position, weapon.graphics.transform.rotation);
             weaponInst.transform.SetParent(_localWeaponHolder);
-            _currentLocalGraphics = weaponInst.GetComponent<WeaponGraphics>();
-            if (_currentLocalGraphics == null)
+
+            // Change the look locally
+            weaponInst.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+            weaponInst.transform.localPosition = new Vector3(0f, 0f, 0f);
+
+            _currentGraphics = weaponInst.GetComponent<WeaponGraphics>();
+            if (_currentGraphics == null)
             {
                 Debug.LogError("No graphics effects on weapon " + weaponInst.name);
             }
@@ -49,13 +55,8 @@ public class WeaponManager : NetworkBehaviour {
         return _currentWeapon;
     }
 
-    public WeaponGraphics GetCurrentLocalGraphics()
+    public WeaponGraphics GetCurrentGraphics()
     {
-        return _currentLocalGraphics;
-    }
-
-    public WeaponGraphics GetCurrentGlobalGraphics()
-    {
-        return _currentGlobalGraphics;
+        return _currentGraphics;
     }
 }

@@ -27,13 +27,12 @@ public class PlayerSetup : NetworkBehaviour {
             DisableComponents();   
             AssignRemoteLayer();
             // Disable player graphics for remote player
-            SetLayerRecursively(_remoteGraphics, LayerMask.NameToLayer(_dontDrawLayerName));
+            Util.SetLayerRecursively(_remoteGraphics, LayerMask.NameToLayer(_dontDrawLayerName));
         }
         else
         {
             // Disable player graphics for local player
-            SetLayerRecursively(_playerGraphics, LayerMask.NameToLayer(_dontDrawLayerName));
-            
+            Util.SetLayerRecursively(_playerGraphics, LayerMask.NameToLayer(_dontDrawLayerName));
             // Create player ui
             playerUIInstance = Instantiate(_playerUIPrefab);
             playerUIInstance.name = _playerUIPrefab.name;
@@ -49,15 +48,6 @@ public class PlayerSetup : NetworkBehaviour {
         }
 
         GetComponent<Player>().Setup();
-    }
-
-    void SetLayerRecursively(GameObject obj, int newLayer)
-    {
-        obj.layer = newLayer;
-        foreach(Transform child in obj.transform)
-        {
-            SetLayerRecursively(child.gameObject, newLayer);
-        }
     }
 
     public override void OnStartClient()

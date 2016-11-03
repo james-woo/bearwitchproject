@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 using System.Collections;
 
 [RequireComponent(typeof(PlayerSetup))]
 public class Player : NetworkBehaviour {
 
     // Health
+    [SerializeField]
+    private RectTransform _healthForeground;
+    [SerializeField]
+    private Text _healthText;
     [SerializeField]
     private float _maxHealth = 100f;
     [SerializeField]
@@ -15,6 +20,10 @@ public class Player : NetworkBehaviour {
     private float _currentHealth;
 
     // Mana
+    [SerializeField]
+    private RectTransform _manaForeground;
+    [SerializeField]
+    private Text _manaText;
     [SerializeField]
     private float _maxMana = 100f;
     [SerializeField]
@@ -32,6 +41,7 @@ public class Player : NetworkBehaviour {
     
     [SyncVar]
     private bool _isDead = false;
+
     public bool isDead
     {
         get { return _isDead; }
@@ -39,18 +49,6 @@ public class Player : NetworkBehaviour {
     }
 
     private Animator _animator;
-
-	public void Setup()
-    {
-        _animator = GetComponent<Animator>();
-        _wasEnabled = new bool[_disableOnDeath.Length];
-        for (int i = 0; i < _wasEnabled.Length; i++)
-        {
-            _wasEnabled[i] = _disableOnDeath[i].enabled;
-        }
-
-        SetDefaults();
-    }
 
     void Start()
     {
@@ -61,6 +59,18 @@ public class Player : NetworkBehaviour {
     void Update()
     {
         
+    }
+
+    public void Setup()
+    {
+        _animator = GetComponent<Animator>();
+        _wasEnabled = new bool[_disableOnDeath.Length];
+        for (int i = 0; i < _wasEnabled.Length; i++)
+        {
+            _wasEnabled[i] = _disableOnDeath[i].enabled;
+        }
+
+        SetDefaults();
     }
 
     public void SetDefaults()
@@ -94,11 +104,12 @@ public class Player : NetworkBehaviour {
             GetComponent<PlayerSetup>().playerUIInstance.SetActive(true);
         }
     }
-
+        
     void RegenerateHealth()
     {
-        if (_currentHealth < _maxHealth)
+        if (_currentHealth < _maxHealth && !_isDead)
             _currentHealth += _healthRegen;
+        RpcUpdateHealth();
     }
 
     public float GetCurrentHealth()
@@ -110,11 +121,12 @@ public class Player : NetworkBehaviour {
     {
         return _maxHealth;
     }
-
+        
     void RegenerateMana()
     {
-        if (_currentMana < _maxMana)
+        if (_currentMana < _maxMana && !_isDead)
             _currentMana += _manaRegen;
+        RpcUpdateMana();
     }
 
     public float GetCurrentMana()
@@ -128,9 +140,26 @@ public class Player : NetworkBehaviour {
     }
 
     [ClientRpc]
+    public void RpcUpdateHealth()
+    {
+        _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
+        _healthForeground.localScale = new Vector3(_currentHealth/_maxHealth, 1f, 1f);
+        _healthText.text = _currentHealth.ToString() + "/" + _maxHealth.ToString();
+    }
+
+    [ClientRpc]
+    public void RpcUpdateMana()
+    {
+        _currentMana = Mathf.Clamp(_currentMana, 0, _maxMana);
+        _manaForeground.localScale = new Vector3(_currentMana/_maxMana, 1f, 1f);
+        _manaText.text = _currentMana.ToString() + "/" + _maxMana.ToString();
+    }
+
+    [ClientRpc]
     public void RpcSpendMana(float amount)
     {
         _currentMana -= amount;
+        RpcUpdateMana();
         Debug.Log(transform.name + " now has " + _currentMana + " mana");
     }
 
@@ -140,6 +169,7 @@ public class Player : NetworkBehaviour {
     {
         if (_isDead) return;
         _currentHealth -= damage;
+        RpcUpdateHealth();
         Debug.Log(transform.name + " now has " + _currentHealth + " health");
 
         if (_currentHealth <= 0.0f)

@@ -61,9 +61,6 @@ public class PlayerAttack : NetworkBehaviour {
     void CmdOnAttack()
     {
         RpcDoAttackAnimate();
-        
-        // Reduce mana
-        _player.RpcSpendMana(1f);
     }
 
     // Is called on the server when we hit something, takes in hit point and normal of surface
@@ -77,7 +74,7 @@ public class PlayerAttack : NetworkBehaviour {
     [ClientRpc]
     void RpcDoAttackAnimate()
     {
-        _weaponManager.GetCurrentGlobalGraphics().effect.Play();
+        _weaponManager.GetCurrentGraphics().effect.Play();
 
         _animator.SetTrigger("Attacking");
     }
@@ -87,7 +84,7 @@ public class PlayerAttack : NetworkBehaviour {
     void RpcDoHitAnimate(Vector3 pos, Vector3 normal)
     {
         // Can use object pooling to instantiate lots of hit effects to increase performance
-        GameObject hitEffect = (GameObject)Instantiate(_weaponManager.GetCurrentGlobalGraphics().hitEffectPrefab, pos, Quaternion.LookRotation(normal));
+        GameObject hitEffect = (GameObject)Instantiate(_weaponManager.GetCurrentGraphics().hitEffectPrefab, pos, Quaternion.LookRotation(normal));
         Destroy(hitEffect, 1f);
     }
 
@@ -97,7 +94,10 @@ public class PlayerAttack : NetworkBehaviour {
     {
         if (!isLocalPlayer) return;
 
-        // We are attacking, call the OnShoot method on the server
+        // Spend mana to attack, if mana == 0 cannot attack
+        if (_player.GetCurrentMana() == 0) return;
+        
+        // We are attacking, call the OnAttack method on the server
         CmdOnAttack();
 
         RaycastHit hit;

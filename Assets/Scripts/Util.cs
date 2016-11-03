@@ -14,4 +14,16 @@ public class Util {
             SetLayerRecursively(child.gameObject, newLayer);
         }
     }
+
+    public static void SetTagRecursively(GameObject obj, string tag)
+    {
+        if (obj == null) return;
+        obj.tag = tag;
+
+        foreach(Transform child in obj.transform)
+        {
+            if (child == null) continue;
+            SetTagRecursively(child.gameObject, tag);
+        }
+    }
 }
