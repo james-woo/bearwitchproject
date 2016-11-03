@@ -48,28 +48,47 @@ public class Player : NetworkBehaviour {
         protected set { _isDead = value; }
     }
 
+    private bool _firstSetup = true;
     private Animator _animator;
 
     void Start()
     {
+        _animator = GetComponent<Animator>();
         InvokeRepeating("RegenerateHealth", 0.0f, 1.0f);
         InvokeRepeating("RegenerateMana", 0.0f, 1.0f);
     }
 
-    void Update()
+    public void SetupPlayer()
     {
-        
+        if (isLocalPlayer)
+        {
+            // Switch cameras
+            GameManager.instance.SetSceneCameraActive(false);
+            GetComponent<PlayerSetup>().playerUIInstance.SetActive(true);
+        }
+        CmdBroadcastNewPlayer();
     }
 
-    public void Setup()
+    [Command]
+    void CmdBroadcastNewPlayer()
     {
-        _animator = GetComponent<Animator>();
-        _wasEnabled = new bool[_disableOnDeath.Length];
-        for (int i = 0; i < _wasEnabled.Length; i++)
+        RpcSetupPlayerOnAllCients();
+    }
+
+    [ClientRpc]
+    void RpcSetupPlayerOnAllCients()
+    {
+        if (_firstSetup)
         {
-            _wasEnabled[i] = _disableOnDeath[i].enabled;
+            _wasEnabled = new bool[_disableOnDeath.Length];
+            for (int i = 0; i < _wasEnabled.Length; i++)
+            {
+                _wasEnabled[i] = _disableOnDeath[i].enabled;
+            }
+            _firstSetup = false;
         }
 
+        _animator.SetTrigger("Alive");
         SetDefaults();
     }
 
@@ -97,19 +116,13 @@ public class Player : NetworkBehaviour {
         {
             col.enabled = true;
         }
-
-        if (isLocalPlayer)
-        {
-            GameManager.instance.SetSceneCameraActive(false);
-            GetComponent<PlayerSetup>().playerUIInstance.SetActive(true);
-        }
     }
         
     void RegenerateHealth()
     {
         if (_currentHealth < _maxHealth && !_isDead)
             _currentHealth += _healthRegen;
-        RpcUpdateHealth();
+        CmdUpdateHealth();
     }
 
     public float GetCurrentHealth()
@@ -126,7 +139,7 @@ public class Player : NetworkBehaviour {
     {
         if (_currentMana < _maxMana && !_isDead)
             _currentMana += _manaRegen;
-        RpcUpdateMana();
+        CmdUpdateMana();
     }
 
     public float GetCurrentMana()
@@ -137,6 +150,18 @@ public class Player : NetworkBehaviour {
     public float GetMaxMana()
     {
         return _maxMana;
+    }
+
+    [Command]
+    public void CmdUpdateHealth()
+    {
+        RpcUpdateHealth();
+    }
+
+    [Command]
+    public void CmdUpdateMana()
+    {
+        RpcUpdateMana();
     }
 
     [ClientRpc]
@@ -220,9 +245,12 @@ public class Player : NetworkBehaviour {
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
 
-        SetDefaults();
+        yield return new WaitForSeconds(0.1f);
 
-        Debug.Log(transform.name + " respawned");
-        _animator.SetTrigger("Respawn");
+        // Switch cameras
+        GameManager.instance.SetSceneCameraActive(false);
+        GetComponent<PlayerSetup>().playerUIInstance.SetActive(true);
+
+        SetupPlayer();
     }
 }
